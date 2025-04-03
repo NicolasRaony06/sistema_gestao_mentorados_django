@@ -4,5 +4,5 @@ from django.http import HttpResponse
 
 urlpatterns = [
     path('cadastro/', views.cadastro, name='cadastro'),
-    path('login/', lambda requets: HttpResponse('Em breve!'), name='login'),
+    path('login/', views.login, name='login'),
 ]

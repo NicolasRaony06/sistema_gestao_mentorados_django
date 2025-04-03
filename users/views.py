@@ -22,7 +22,7 @@ def cadastro(request):
             messages.add_message(request, constants.ERROR, "A senha deve conter pelo menos 6 caracteres")
             return redirect(cadastro)
         
-        user = User.objects.filter(username=username)
+        user = User.objects.filter(username__iexact=username)
 
         if user.exists():
             messages.add_message(request, constants.ERROR, f"O usuário {username} já existe!")
@@ -34,4 +34,31 @@ def cadastro(request):
         )
 
         return redirect('/usuarios/login')
+
+  
+def login(request):
+    if auth.get_user(request):
+        return redirect('/mentorados')
+    
+    if request.method == 'GET':
+        return render(request, 'login.html')
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # if not (User.objects.filter(username__iexact=username)).exists():
+        #     messages.add_message(request, constants.ERROR, "Este usuário não existe!")
+        #     return redirect(login)
+
+        user = auth.authenticate(request, username=username, password=password)
+
+        if user:
+            auth.login(request, user)
+            return redirect('/mentorados')
+
+        messages.add_message(request, constants.ERROR, "Este usuário não existe!")
+        return redirect(login)
+    
+
 
