@@ -37,7 +37,7 @@ def cadastro(request):
 
   
 def login(request):
-    if auth.get_user(request):
+    if request.user.is_authenticated:
         return redirect('/mentorados')
     
     if request.method == 'GET':
@@ -59,6 +59,14 @@ def login(request):
 
         messages.add_message(request, constants.ERROR, "Este usuário não existe!")
         return redirect(login)
+    
+def logout(request):
+    if request.user.is_authenticated:
+        auth.logout(request)
+        return redirect(login)
+    
+    messages.add_message(request, constants.ERROR, "Você não fez login ainda!")
+    return redirect(login)
     
 
 
