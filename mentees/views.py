@@ -10,7 +10,14 @@ def mentorados(request):
     if request.method == 'GET':
         navigators = Navigators.objects.filter(user=request.user)
         mentorados = Mentorados.objects.filter(user=request.user)
-        return render(request, 'mentorados.html', {'navigators':navigators, 'stages':Mentorados.stages_choices, 'mentorados':mentorados})    
+
+        stage_flat = [i[1] for i in Mentorados.stages_choices]
+
+        stage_qtd = []
+        for stage, stage2 in Mentorados.stages_choices:
+            stage_qtd.append(mentorados.filter(stage=stage).count()) 
+
+        return render(request, 'mentorados.html', {'navigators':navigators, 'stages':Mentorados.stages_choices, 'mentorados':mentorados, 'stage_flat': stage_flat, 'stage_qtd': stage_qtd})    
     
     if request.method == 'POST':
         name = request.POST.get('name')
