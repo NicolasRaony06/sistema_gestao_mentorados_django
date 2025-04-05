@@ -15,7 +15,7 @@ class Mentorados(models.Model):
     )
     name = models.CharField(max_length=120)
     created_at = models.DateField(auto_now_add=True)
-    photo = models.ImageField(upload_to='photos', null=True, blank=True)
+    photo = models.ImageField(upload_to='photos', default='photos/default.bmp')
     stage = models.CharField(max_length=2, choices=stages_choices)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     navigator = models.ForeignKey(Navigators,null=True, blank=True, on_delete=models.CASCADE)

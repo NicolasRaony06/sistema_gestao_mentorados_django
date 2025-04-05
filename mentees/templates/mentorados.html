@@ -126,12 +126,12 @@
               </thead>
               <tbody class="divide-y divide-white/5">
                 
-               
+                {% for mentorado in mentorados %}
                   <tr>
                     <td class="py-4 pl-4 pr-8 sm:pl-6 lg:pl-8">
                       <div class="flex items-center gap-x-4">
-                        <img src="#" alt="" class="size-8 rounded-full bg-gray-800">
-                        <div class="truncate text-sm/6 font-medium text-white">Caio Sampaio</div>
+                        <img src="{{mentorado.photo.url}}" alt="" class="size-8 rounded-full bg-gray-800">
+                        <div class="truncate text-sm/6 font-medium text-white">{{mentorado.name}}</div>
                       </div>
                     </td>
                     <td class="hidden py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
@@ -147,13 +147,10 @@
                         <div class="hidden text-white sm:block">Ativo</div>
                       </div>
                     </td>
-                    <td class="hidden py-4 pl-0 pr-8 text-sm/6 text-gray-400 md:table-cell lg:pr-20">26/03/2025</td>
-                    <td class="hidden py-4 pl-0 pr-8 text-sm/6 text-gray-400 md:table-cell lg:pr-20">
-                     
-                        Caio Sampaio
-                    </td>
+                    <td class="hidden py-4 pl-0 pr-8 text-sm/6 text-gray-400 md:table-cell lg:pr-20">{{mentorado.created_at}}</td>
+                    <td class="hidden py-4 pl-0 pr-8 text-sm/6 text-gray-400 md:table-cell lg:pr-20">{{mentorado.navigator.name}}</td>
                   </tr>
-                
+                {% endfor %}
               </tbody>
             </table>
           </div>
