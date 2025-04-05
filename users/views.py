@@ -6,6 +6,9 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 
 def cadastro(request):
+    if request.user.is_authenticated:
+        return redirect('mentorados')
+    
     if request.method == 'GET':
         return render(request, 'cadastro.html')
     
@@ -33,12 +36,12 @@ def cadastro(request):
             password=password
         )
 
-        return redirect('/usuarios/login')
+        return redirect('login')
 
   
 def login(request):
     if request.user.is_authenticated:
-        return redirect('/mentorados')
+        return redirect('mentorados')
     
     if request.method == 'GET':
         return render(request, 'login.html')
@@ -55,7 +58,7 @@ def login(request):
 
         if user:
             auth.login(request, user)
-            return redirect('/mentorados')
+            return redirect('mentorados')
 
         messages.add_message(request, constants.ERROR, "Este usuário não existe!")
         return redirect(login)

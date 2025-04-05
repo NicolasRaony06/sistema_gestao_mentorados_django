@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import timedelta
 
 class Navigators(models.Model):
     name = models.CharField(max_length=120)
@@ -22,3 +23,15 @@ class Mentorados(models.Model):
 
     def __str__(self):
         return self.name
+
+class ScheduleAvailability(models.Model):
+    start_date = models.DateTimeField(null=True, blank=True)
+    mentor = models.ForeignKey(User, on_delete=models.CASCADE)
+    scheduled = models.BooleanField(default=False)
+
+    @property
+    def final_date(self):
+        try:
+            return self.start_date + timedelta(minutes=50)
+        except:
+            return None
