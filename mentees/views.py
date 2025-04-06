@@ -73,5 +73,25 @@ def reunioes(request):
         schedule.save()
 
         return redirect(reunioes)
+    
+def auth(request):
+    if request.method == 'GET':
+        return render(request, 'auth_mentorados.html')
+    
+    if request.method == 'POST':
+        token = request.POST.get('token')
+
+        if not Mentorados.objects.filter(token=token).exists():
+            messages.add_message(request, messages.constants.ERROR, 'Token Inválido!')
+            return redirect('auth_mentorado')
+        
+        response = redirect('escolher_dia')
+        response.set_cookie('auth_mentorado', token, max_age=3600)
+
+        return response
+    
+def escolher_dia(request):
+    if request.method == 'GET':
+        return render(request, 'escolher_dia.html')
 
 
