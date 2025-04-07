@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Navigators, Mentorados, ScheduleAvailability
 from datetime import datetime, timedelta
+from .auth import validate_token
 
 def mentorados(request):
     if not request.user.is_authenticated:
@@ -86,12 +87,23 @@ def auth(request):
             return redirect('auth_mentorado')
         
         response = redirect('escolher_dia')
-        response.set_cookie('auth_mentorado', token, max_age=3600)
+        response.set_cookie('auth_token', token, max_age=3600)
 
         return response
     
 def escolher_dia(request):
+    if not validate_token(request.COOKIES.get('auth_token')):
+        messages.add_message(request, messages.constants.ERROR, 'Insira seu token!')
+        return redirect('auth_mentorado')
+    
     if request.method == 'GET':
-        return render(request, 'escolher_dia.html')
+        availability = ScheduleAvailability.objects.filter(
+            start_date__gte=datetime.now(),
+            scheduled=False,
+            mentor=validate_token(request.COOKIES.get('auth_token')).user
+
+        ).values_list('start_date', flat=True)
+        print(availability)
+        return render(request, 'escolher_dia.html', {'horarios':availability})
 
 
